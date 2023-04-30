@@ -11,8 +11,15 @@ void main() async {
   /** Abre um Box tipado */
   await Hive.openBox<UserModel>('users');
 
-  runApp(const MaterialApp(
-    home: HomeContact(),
+  final ThemeData theme = ThemeData();
+
+  runApp( MaterialApp(
+    home: const HomeContact(),
+    theme: ThemeData().copyWith(
+      colorScheme: theme.colorScheme.copyWith(
+        primary: Colors.blueGrey[800],
+      )
+    ),
     debugShowCheckedModeBanner: false,
   ));
 }

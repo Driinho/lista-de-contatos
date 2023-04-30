@@ -18,12 +18,7 @@ class _HomeContactState extends State<HomeContact> {
   int _paginaAtual = 0;
 
   final List<Widget> _telas = [
-    FormContact(
-      users: () {
-        final box = UserBox.getUsers();
-        return box.values.toList().cast<UserModel>();
-      }(),
-    ),
+    const FormContact(),
     ValueListenableBuilder(
       valueListenable: UserBox.getUsers().listenable(),
       builder: (BuildContext context, Box userBox, Widget? child) {

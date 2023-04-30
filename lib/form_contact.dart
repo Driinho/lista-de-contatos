@@ -6,11 +6,7 @@ import 'model/user.dart';
 
 // ignore: must_be_immutable
 class FormContact extends StatefulWidget {
-  final int? index;
-  final List<UserModel>? users;
-  UserModel? user;
-
-  FormContact({super.key, this.index, this.users});
+  const FormContact({Key? key}): super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -24,19 +20,19 @@ class _FormContactState extends State<FormContact> {
   final emailUserControl = TextEditingController();
   final telefoneUserControl = TextEditingController();
 
-  Future<void> addUser(String id, String name, String email) async {
+  Future<void> addUser(String id, String name, String email, String telefone) async {
     if (_formKey.currentState!.validate() == true) {
       _formKey.currentState!.save();
 
       final user = UserModel()
         ..user_id = id
         ..user_name = name
-        ..email = email;
+        ..email = email
+        ..telefone = telefone;
 
       // pega a caixa aberta
       final box = UserBox.getUsers();
       box.add(user).then((value) => _clearTextControllers());
-
     }
   }
 
@@ -55,78 +51,72 @@ class _FormContactState extends State<FormContact> {
     emailUserControl.clear();
     telefoneUserControl.clear();
   }
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.index != null) {
-      widget.user = widget.users![widget.index!];
-
-      idUserControl.text = widget.user!.user_id;
-      nameUserControl.text = widget.user!.user_name;
-      emailUserControl.text = widget.user!.email;
-    }
-  }
   
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          FormContactFielder(
-            controller: idUserControl,
-            iconData: Icons.person,
-            hintTextName: 'Código',
-          ),
-          const SizedBox(height: 10),
-          FormContactFielder(
-            controller: nameUserControl,
-            iconData: Icons.person_outline,
-            hintTextName: 'Nome',
-          ),
-          const SizedBox(height: 10),
-          FormContactFielder(
-            controller: emailUserControl,
-            iconData: Icons.email_outlined,
-            textInputType: TextInputType.emailAddress,
-            hintTextName: 'Email',
-          ),
-          const SizedBox(height: 10),
-          FormContactFielder(
-            controller: telefoneUserControl,
-            iconData: Icons.phone_outlined,
-            textInputType: TextInputType.phone,
-            hintTextName: 'Telefone',
-          ),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.only(left: 40),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => addUser(
-                      idUserControl.text,
-                      nameUserControl.text,
-                      emailUserControl.text,
+    return Scaffold(
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              FormContactFielder(
+                controller: idUserControl,
+                iconData: Icons.person,
+                hintTextName: 'Código',
+              ),
+              const SizedBox(height: 10),
+              FormContactFielder(
+                controller: nameUserControl,
+                iconData: Icons.person_outline,
+                hintTextName: 'Nome',
+              ),
+              const SizedBox(height: 10),
+              FormContactFielder(
+                controller: emailUserControl,
+                iconData: Icons.email_outlined,
+                textInputType: TextInputType.emailAddress,
+                hintTextName: 'Email',
+              ),
+              const SizedBox(height: 10),
+              FormContactFielder(
+                controller: telefoneUserControl,
+                iconData: Icons.phone_outlined,
+                textInputType: TextInputType.phone,
+                hintTextName: 'Telefone',
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.only(left: 40),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => addUser(
+                          idUserControl.text,
+                          nameUserControl.text,
+                          emailUserControl.text,
+                          telefoneUserControl.text,
+                        ),
+                        child: const Text('Adicionar'),
+                      ),
                     ),
-                    child: const Text('Adicionar'),
-                  ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _clearTextControllers,
+                        child: const Text('Limpar Campos'),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: _clearTextControllers,
-                    child: const Text('Limpar Campos'),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
